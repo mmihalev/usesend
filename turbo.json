@@ -16,11 +16,15 @@
       ],
       "env": [
         "DATABASE_URL",
+        "REDIS_URL",
         "NEXTAUTH_URL",
         "GITHUB_ID",
         "GITHUB_SECRET",
         "AWS_SECRET_KEY",
         "AWS_ACCESS_KEY",
+        "AWS_DEFAULT_REGION",
+        "AWS_SES_ENDPOINT",
+        "AWS_SNS_ENDPOINT",
         "NEXTAUTH_SECRET",
         "NODE_ENV",
         "VERCEL_URL",
@@ -35,7 +39,21 @@
         "S3_COMPATIBLE_ACCESS_KEY",
         "S3_COMPATIBLE_SECRET_KEY",
         "S3_COMPATIBLE_API_URL",
-        "S3_COMPATIBLE_PUBLIC_URL"
+        "S3_COMPATIBLE_PUBLIC_URL",
+        "S3_COMPATIBLE_BUCKET",
+        "FROM_EMAIL",
+        "ADMIN_EMAIL",
+        "FOUNDER_EMAIL",
+        "DISCORD_WEBHOOK_URL",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_BASIC_PRICE_ID",
+        "STRIPE_BASIC_USAGE_PRICE_ID",
+        "STRIPE_LEGACY_BASIC_PRICE_ID",
+        "STRIPE_WEBHOOK_SECRET",
+        "SMTP_HOST",
+        "SMTP_USER",
+        "API_RATE_LIMIT",
+        "AUTH_EMAIL_RATE_LIMIT"
       ]
     },
     "lint": {
