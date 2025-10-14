@@ -148,7 +148,7 @@ export async function sendMail(
       return;
     } else {
       logger.error(
-        { code: resp.error?.code, message: resp.error?.message },
+        {from: fromAddress, to: email, subject: subject, error:resp.error},
         "Error sending email using usesend"
       );
     }
