@@ -9,6 +9,7 @@ import { logger } from "../logger/log";
 import { ApiKey, DomainStatus, type Domain } from "@prisma/client";
 import { LimitService } from "./limit-service";
 import type { DomainDnsRecord } from "~/types/domain";
+import { env } from "~/env";
 
 const DOMAIN_STATUS_VALUES = new Set(Object.values(DomainStatus));
 
@@ -29,7 +30,8 @@ function parseDomainStatus(status?: string | null): DomainStatus {
 function buildDnsRecords(domain: Domain): DomainDnsRecord[] {
   const subdomainSuffix = domain.subdomain ? `.${domain.subdomain}` : "";
   const mailDomain = `mail${subdomainSuffix}`;
-  const dkimSelector = domain.dkimSelector ?? "usesend";
+  const dkimSelector =
+    domain.dkimSelector ?? env.USESEND_DKIM_SELECTOR ?? "usesend";
 
   const spfStatus = parseDomainStatus(domain.spfDetails);
   const dkimStatus = parseDomainStatus(domain.dkimStatus);
@@ -113,7 +115,7 @@ export async function validateDomainFromEmail(email: string, teamId: number) {
   if (!domain) {
     throw new UnsendApiError({
       code: "BAD_REQUEST",
-      message: `Domain: ${fromDomain} of from email is wrong. Use the domain verified by useSend`,
+      message: `Domain: ${fromDomain} of from email is wrong. Use the domain verified by ${env.USESEND_APP_NAME ?? "useSend"}`,
     });
   }
 
@@ -182,7 +184,7 @@ export async function createDomain(
   }
 
   const subdomain = tldts.getSubdomain(name);
-  const dkimSelector = "usesend";
+  const dkimSelector = env.USESEND_DKIM_SELECTOR ?? "usesend";
   const publicKey = await ses.addDomain(
     name,
     region,

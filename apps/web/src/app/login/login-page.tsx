@@ -27,6 +27,7 @@ import Spinner from "@usesend/ui/src/spinner";
 import Link from "next/link";
 import { useTheme } from "@usesend/ui";
 import { useSearchParams as useNextSearchParams } from "next/navigation";
+import { useBranding } from "~/providers/branding-context";
 
 const emailSchema = z.object({
   email: z
@@ -68,6 +69,7 @@ export default function LoginPage({
   providers?: ClientSafeProvider[];
   isSignup?: boolean;
 }) {
+  const { appName } = useBranding();
   const [emailStatus, setEmailStatus] = useState<
     "idle" | "sending" | "success"
   >("idle");
@@ -127,17 +129,17 @@ export default function LoginPage({
       <div className="flex flex-col gap-6">
         <Image
           src={"/logo-squircle.png"}
-          alt={process.env.USESEND_APP_NAME ?? "useSend"}
+          alt={appName}
           width={50}
           height={50}
           className="mx-auto"
         />
         <div>
           <p className="text-2xl text-center font-semibold">
-            {isSignup ? "Create new account" : `Sign into ${process.env.USESEND_APP_NAME ?? "useSend"}`}
+            {isSignup ? "Create new account" : `Sign into ${appName}`}
           </p>
           <p className="text-center mt-2 text-sm text-muted-foreground">
-            {isSignup ? "Already have an account?" : `New to ${process.env.USESEND_APP_NAME ?? "useSend"}?`}
+            {isSignup ? "Already have an account?" : `New to ${appName}?`}
             <Link
               href={isSignup ? "/login" : "/signup"}
               className=" text-foreground hover:underline ml-1"

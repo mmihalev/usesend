@@ -5,6 +5,7 @@ import { EmailLayout } from "./components/EmailLayout";
 import { EmailHeader } from "./components/EmailHeader";
 import { EmailFooter } from "./components/EmailFooter";
 import { EmailButton } from "./components/EmailButton";
+import { env } from "~/env";
 
 interface OtpEmailProps {
   otpCode: string;
@@ -16,7 +17,7 @@ interface OtpEmailProps {
 export function OtpEmail({
   otpCode,
   loginUrl,
-  hostName = "useSend",
+  hostName = env.USESEND_APP_NAME ?? "useSend",
   logoUrl,
 }: OtpEmailProps) {
   return (
@@ -45,7 +46,7 @@ export function OtpEmail({
             textAlign: "left" as const,
           }}
         >
-          Use the verification code below to sign in to your useSend account:
+          Use the verification code below to sign in to your {hostName} account:
         </Text>
 
         <Container

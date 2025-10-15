@@ -7,7 +7,7 @@ async function testEmailTemplates() {
     // Test OTP email
     const otpHtml = await renderOtpEmail({
       otpCode: 'ABC123',
-      loginUrl: 'https://app.usesend.com/login?token=abc123',
+      loginUrl: `${process.env.NEXTAUTH_URL ?? 'https://app.usesend.com'}/login?token=abc123`,
       hostName: 'useSend',
     });
     
@@ -17,7 +17,7 @@ async function testEmailTemplates() {
     // Test Team Invite email
     const inviteHtml = await renderTeamInviteEmail({
       teamName: 'My Awesome Team',
-      inviteUrl: 'https://app.usesend.com/join-team?inviteId=123',
+      inviteUrl: `${process.env.NEXTAUTH_URL ?? 'https://app.usesend.com'}/join-team?inviteId=123`,
     });
     
     console.log('✅ Team Invite Email rendered successfully');

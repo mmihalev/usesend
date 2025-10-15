@@ -8,6 +8,9 @@ async function UnsubscribePage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const appName = process.env.USESEND_APP_NAME ?? "useSend";
+  const appUrl = process.env.NEXTAUTH_URL ?? "https://usesend.com";
+
   const params = await searchParams;
 
   const id = params.id as string;
@@ -37,8 +40,8 @@ async function UnsubscribePage({
       <div className=" fixed bottom-10  p-4">
         <p>
           Powered by{" "}
-          <a href="https://usesend.com" className="font-bold" target="_blank">
-            useSend
+          <a href={appUrl} className="font-bold" target="_blank">
+            {appName}
           </a>
         </p>
       </div>

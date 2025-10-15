@@ -49,6 +49,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@usesend/ui/src/dropdown-menu";
+import { useBranding } from "~/providers/branding-context";
 
 // General items
 const generalItems = [
@@ -118,6 +119,7 @@ const settingsItems = [
 export function AppSidebar() {
   const { data: session } = useSession();
   const { state, open } = useSidebar();
+  const { appName, docsUrl } = useBranding();
 
   const pathname = usePathname();
 
@@ -127,7 +129,7 @@ export function AppSidebar() {
         <SidebarGroupLabel>
           <div className="flex items-center gap-2">
             <span className="text-lg font-semibold text-foreground font-mono">
-              useSend
+              {appName}
             </span>
             <Badge variant="outline">Beta</Badge>
           </div>
@@ -235,7 +237,7 @@ export function AppSidebar() {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip="Docs">
-                <Link href="https://docs.usesend.com" target="_blank">
+                <Link href={docsUrl} target="_blank">
                   <BookOpenText />
                   <span>Docs</span>
                 </Link>

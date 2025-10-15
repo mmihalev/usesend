@@ -20,13 +20,13 @@ export async function GET(request: NextRequest) {
     if (type === "otp") {
       html = await renderOtpEmail({
         otpCode: "ABC123",
-        loginUrl: `${process.env.USESEND_BASE_URL || "https://app.usesend.com"}/login?token=abc123`,
+        loginUrl: `${process.env.NEXTAUTH_URL || "https://app.usesend.com"}/login?token=abc123`,
         hostName: process.env.USESEND_APP_NAME || "useSend",
       });
     } else if (type === "invite") {
       html = await renderTeamInviteEmail({
         teamName: "My Awesome Team",
-        inviteUrl: `${process.env.USESEND_BASE_URL || "https://app.usesend.com"}/join-team?inviteId=123`,
+        inviteUrl: `${process.env.NEXTAUTH_URL || "https://app.usesend.com"}/join-team?inviteId=123`,
         inviterName: "John Doe",
         role: "admin",
       });
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
         used: 8000,
         limit: 10000,
         period: period as "daily" | "monthly",
-        manageUrl: `${process.env.USESEND_BASE_URL || "https://app.usesend.com"}/settings/billing`,
+        manageUrl: `${process.env.NEXTAUTH_URL || "https://app.usesend.com"}/settings/billing`,
         isPaidPlan: isPaidPlan,
       });
     } else if (type === "usage-limit") {
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
         teamName: "Acme Inc",
         limit: 10000,
         period: period as "daily" | "monthly",
-        manageUrl: `${process.env.USESEND_BASE_URL || "https://app.usesend.com"}/settings/billing`,
+        manageUrl: `${process.env.NEXTAUTH_URL || "https://app.usesend.com"}/settings/billing`,
         isPaidPlan: isPaidPlan,
       });
     } else {
