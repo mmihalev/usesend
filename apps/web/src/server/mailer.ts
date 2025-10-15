@@ -22,13 +22,14 @@ export async function sendSignUpEmail(
   url: string
 ) {
   const { host } = new URL(url);
+  const appName = env.USESEND_APP_NAME ?? "useSend";
 
   if (env.NODE_ENV === "development") {
     logger.info({ email, url, token }, "Sending sign in email");
     return;
   }
 
-  const subject = "Sign in to useSend";
+  const subject = `Sign in to ${appName}`;
 
   // Use jsx-email template for beautiful HTML
   const html = await renderOtpEmail({
@@ -38,7 +39,7 @@ export async function sendSignUpEmail(
   });
 
   // Fallback text version
-  const text = `Hey,\n\nYou can sign in to useSend by clicking the below URL:\n${url}\n\nYou can also use this OTP: ${token}\n\nThanks,\nuseSend Team`;
+  const text = `Hey,\n\nYou can sign in to ${appName} by clicking the below URL:\n${url}\n\nYou can also use this OTP: ${token}\n\nThanks,\n${appName} Team`;
 
   await sendMail(email, subject, text, html);
 }
@@ -49,13 +50,14 @@ export async function sendTeamInviteEmail(
   teamName: string
 ) {
   const { host } = new URL(url);
+  const appName = env.USESEND_APP_NAME ?? "useSend";
 
   if (env.NODE_ENV === "development") {
     logger.info({ email, url, teamName }, "Sending team invite email");
     return;
   }
 
-  const subject = "You have been invited to join useSend";
+  const subject = `You have been invited to join ${appName}`;
 
   // Use jsx-email template for beautiful HTML
   const html = await renderTeamInviteEmail({
@@ -64,7 +66,7 @@ export async function sendTeamInviteEmail(
   });
 
   // Fallback text version
-  const text = `Hey,\n\nYou have been invited to join the team ${teamName} on useSend.\n\nYou can accept the invitation by clicking the below URL:\n${url}\n\nThanks,\nuseSend Team`;
+  const text = `Hey,\n\nYou have been invited to join the team ${teamName} on ${appName}.\n\nYou can accept the invitation by clicking the below URL:\n${url}\n\nThanks,\n${appName} Team`;
 
   await sendMail(email, subject, text, html);
 }
@@ -75,8 +77,9 @@ export async function sendSubscriptionConfirmationEmail(email: string) {
     return;
   }
 
-  const subject = "Thanks for subscribing to useSend";
-  const text = `Hey,\n\nThanks for subscribing to useSend, just wanted to let you know you can join the discord server to have a dedicated support channel for your team. So that we can address your queries / bugs asap.\n\nYou can join over using the link: https://discord.com/invite/BU8n8pJv8S\n\nIf you prefer slack, please let me know\n\ncheers,\nkoushik - useSend`;
+  const appName = env.USESEND_APP_NAME ?? "useSend";
+  const subject = `Thanks for subscribing to ${appName}`;
+  const text = `Hey,\n\nThanks for subscribing to ${appName}! We're excited to have you on board.\n\nIf you ever have questions or need a hand, just reply to this email or reach out to our support team at ${env.FOUNDER_EMAIL}.\n\nCheers,\n${appName}`;
   const html = text.replace(/\n/g, "<br />");
 
   await sendMail(email, subject, text, html, undefined, env.FOUNDER_EMAIL);
