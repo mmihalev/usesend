@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Text } from "jsx-email";
+import { env } from "~/env";
 
 interface EmailFooterProps {
   companyName?: string;
@@ -7,8 +8,8 @@ interface EmailFooterProps {
 }
 
 export function EmailFooter({
-  companyName = "useSend",
-  supportUrl = "mailto:hey@usesend.com",
+  companyName = env.USESEND_APP_NAME ?? "useSend",
+  supportUrl = `mailto:${env.SUPPORT_EMAIL ?? "hey@usesend.com"}`,
 }: EmailFooterProps) {
   return (
     <Container

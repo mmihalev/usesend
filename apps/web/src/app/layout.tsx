@@ -7,6 +7,8 @@ import { Toaster } from "@usesend/ui/src/toaster";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { Metadata } from "next";
+import { BrandingProvider } from "~/providers/branding-context";
+import { env } from "~/env";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,9 +21,10 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "useSend",
-  description: "Open source email platoform",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  title: process.env.USESEND_META_TITLE || "useSend",
+  description:
+    process.env.USESEND_META_DESCRIPTION || "Open source email platform",
+  icons: [{ rel: "icon", url: process.env.USESEND_META_ICON || "/favicon.ico" }],
 };
 
 export default async function RootLayout({
@@ -29,6 +32,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const appName = env.USESEND_APP_NAME || "useSend";
+  const docsUrl = env.USESEND_DOCS_URL || "https://docs.usesend.com";
+
   return (
     <html lang="en" suppressHydrationWarning className="bg-sidebar-background">
       <body
@@ -36,7 +42,9 @@ export default async function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Toaster />
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <BrandingProvider value={{ appName, docsUrl }}>
+            <TRPCReactProvider>{children}</TRPCReactProvider>
+          </BrandingProvider>
         </ThemeProvider>
       </body>
     </html>

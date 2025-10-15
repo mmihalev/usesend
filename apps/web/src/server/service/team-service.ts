@@ -406,8 +406,8 @@ export class TeamService {
 
     const subject =
       reason === LimitReason.EMAIL_FREE_PLAN_MONTHLY_LIMIT_REACHED
-        ? "useSend: You've reached your monthly email limit"
-        : "useSend: You've reached your daily email limit";
+        ? `${env.USESEND_APP_NAME ?? "useSend"}: You've reached your monthly email limit`
+        : `${env.USESEND_APP_NAME ?? "useSend"}: You've reached your daily email limit`;
 
     const text = `Hi ${team.name} team,\n\nYou've reached your ${
       reason === LimitReason.EMAIL_FREE_PLAN_MONTHLY_LIMIT_REACHED
@@ -519,8 +519,8 @@ export class TeamService {
 
     const subject =
       period === "monthly"
-        ? "useSend: You're nearing your monthly email limit"
-        : "useSend: You're nearing your daily email limit";
+        ? `${env.USESEND_APP_NAME ?? "useSend"}: You're nearing your monthly email limit`
+        : `${env.USESEND_APP_NAME ?? "useSend"}: You're nearing your daily email limit`;
 
     const text = `Hi ${team.name} team,\n\nYou've used ${used.toLocaleString()} of your ${period} limit of ${limit.toLocaleString()} emails.\n\nConsider ${
       isPaidPlan

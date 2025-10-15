@@ -15,6 +15,7 @@ import { EmailUsageType } from "@prisma/client";
 import { PlanDetails } from "~/components/payments/PlanDetails";
 import { UpgradeButton } from "~/components/payments/UpgradeButton";
 import { Progress } from "@usesend/ui/src/progress";
+import { useBranding } from "~/providers/branding-context";
 
 const FREE_PLAN_LIMIT = 3000;
 
@@ -28,6 +29,7 @@ function FreePlanUsage({
   const DAILY_LIMIT = 100;
   const totalSent = usage?.reduce((acc, item) => acc + item.sent, 0) || 0;
   const monthlyPercentageUsed = (totalSent / FREE_PLAN_LIMIT) * 100;
+  const { appName } = useBranding();
 
   // Calculate daily usage - this is a simplified version, you might want to adjust based on actual daily tracking
   const dailyUsage = dayUsage?.reduce((acc, item) => acc + item.sent, 0) || 0;
@@ -49,7 +51,7 @@ function FreePlanUsage({
                 <div className="text-sm text-muted-foreground mt-1">
                   {item.type === "TRANSACTIONAL"
                     ? "Mails sent using the send api or SMTP"
-                    : `Mails designed sent from ${process.env.USESEND_APP_NAME || "useSend"} editor`}
+                    : `Mails designed sent from ${appName} editor`}
                 </div>
               </div>
               <div className="font-mono font-medium">

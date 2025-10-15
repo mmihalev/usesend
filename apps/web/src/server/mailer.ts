@@ -79,7 +79,7 @@ export async function sendSubscriptionConfirmationEmail(email: string) {
 
   const appName = env.USESEND_APP_NAME ?? "useSend";
   const subject = `Thanks for subscribing to ${appName}`;
-  const text = `Hey,\n\nThanks for subscribing to ${appName}! We're excited to have you on board.\n\nIf you ever have questions or need a hand, just reply to this email or reach out to our support team at ${env.FOUNDER_EMAIL}.\n\nCheers,\n${appName}`;
+  const text = `Hey,\n\nThanks for subscribing to ${appName}! We're excited to have you on board.\n\nIf you ever have questions or need a hand, just reply to this email or reach out to our support team at ${env.SUPPORT_EMAIL}.\n\nCheers,\n${appName}`;
   const html = text.replace(/\n/g, "<br />");
 
   await sendMail(email, subject, text, html, undefined, env.FOUNDER_EMAIL);

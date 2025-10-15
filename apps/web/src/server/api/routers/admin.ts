@@ -244,12 +244,16 @@ export const adminRouter = createTRPCRouter({
         const userFirstName =
           updatedUser.name?.split(" ")[0] ?? updatedUser.name ?? recipient;
 
-        const text = `Hey ${userFirstName},\n\nThanks for hanging in while we reviewed your waitlist request. I've just moved your account off the waitlist, so you now have full access to useSend.\n\nGo ahead and log back in to start sending: ${env.NEXTAUTH_URL}\n\nIf anything feels unclear or you want help getting set up, reply to this email and it comes straight to me.\n\nCheers,\n${founderName}\n${replyTo}`;
+        const appName = env.USESEND_APP_NAME ?? "useSend";
+        const appUrl =
+          env.NEXTAUTH_URL ??
+          "https://app.usesend.com";
+        const text = `Hey ${userFirstName},\n\nThanks for hanging in while we reviewed your waitlist request. I've just moved your account off the waitlist, so you now have full access to ${appName}.\n\nGo ahead and log back in to start sending: ${appUrl}\n\nIf anything feels unclear or you want help getting set up, reply to this email and it comes straight to me.\n\nCheers,\n${founderName}\n${replyTo}`;
 
         try {
           await sendMail(
             recipient,
-            "useSend: You're off the waitlist",
+            `${appName}: You're off the waitlist`,
             text,
             toPlainHtml(text),
             replyTo,
@@ -300,17 +304,20 @@ export const adminRouter = createTRPCRouter({
       const text = [
         "Hello,",
         "",
-        "Sorry, We cannot proceed with this request at this time, this might affect useSend\u2019s sending reputation.",
+        `Sorry, We cannot proceed with this request at this time, this might affect ${(env.USESEND_APP_NAME ?? "useSend")}\u2019s sending reputation.`,
         "",
         "",
         "cheers,",
-        "koushik - useSend.com",
+        `Support Team - ${(process.env.NEXTAUTH_URL ?? "https://usesend.com").replace(
+          /^https?:\/\//,
+          "",
+        )}`,
       ].join("\n");
 
       try {
         await sendMail(
           user.email,
-          "useSend: Waitlist request update",
+          `${env.USESEND_APP_NAME ?? "useSend"}: Waitlist request update`,
           text,
           toPlainHtml(text),
           replyTo,

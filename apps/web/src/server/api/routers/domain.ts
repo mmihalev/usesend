@@ -16,6 +16,7 @@ import {
 } from "~/server/service/domain-service";
 import { sendEmail } from "~/server/service/email-service";
 import { SesSettingsService } from "~/server/service/ses-settings-service";
+import { env } from "~/env";
 
 export const domainRouter = createTRPCRouter({
   getAvailableRegions: protectedProcedure.query(async () => {
@@ -88,13 +89,31 @@ export const domainRouter = createTRPCRouter({
         throw new Error("User email not found");
       }
 
+      const appName = env.USESEND_APP_NAME ?? "useSend";
+      const dashboardUrl =
+        process.env.NEXTAUTH_URL ??
+        env.NEXTAUTH_URL ??
+        "https://app.usesend.com";
+      const subject = `${appName} test email`;
+      const text = [
+        "Hello,",
+        "",
+        `This is a test message sent from ${appName} to confirm that emails from ${domain.name} are delivering correctly.`,
+        "",
+        `You can return to ${dashboardUrl} to review delivery details or resend if needed.`,
+        "",
+        `Thanks,`,
+        `${appName} Team`,
+      ].join("\n");
+      const html = `<p>Hello,</p><p>This is a test message sent from <strong>${appName}</strong> to confirm that emails from <strong>${domain.name}</strong> are delivering correctly.</p><p>You can return to <a href="${dashboardUrl}">${dashboardUrl}</a> to review delivery details or resend if needed.</p><p>Thanks,<br />${appName} Team</p>`;
+
       return sendEmail({
         teamId: team.id,
         to: user.email,
         from: `hello@${domain.name}`,
-        subject: "useSend test email",
-        text: "hello,\n\nuseSend is the best open source sending platform\n\ncheck out https://usesend.com",
-        html: "<p>hello,</p><p>useSend is the best open source sending platform<p><p>check out <a href='https://usesend.com'>usesend.com</a>",
+        subject,
+        text,
+        html,
       });
     }
   ),

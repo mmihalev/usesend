@@ -70,6 +70,9 @@ export const env = createEnv({
     USESEND_META_DESCRIPTION: z.string().default("Open source email platform"),
     USESEND_META_ICON: z.string().default("/favicon.ico"),
     USESEND_APP_NAME: z.string().default("useSend"),
+    USESEND_DOCS_URL: z.string().default("https://docs.usesend.com"),
+    USESEND_DKIM_SELECTOR: z.string().default("usesend"),
+    SUPPORT_EMAIL: z.string().email().default("hey@usesend.com"),
   },
 
   /**
@@ -130,6 +133,9 @@ export const env = createEnv({
     USESEND_META_DESCRIPTION: process.env.USESEND_META_DESCRIPTION,
     USESEND_META_ICON: process.env.USESEND_META_ICON,
     USESEND_APP_NAME: process.env.USESEND_APP_NAME,
+    USESEND_DOCS_URL: process.env.USESEND_DOCS_URL,
+    USESEND_DKIM_SELECTOR: process.env.USESEND_DKIM_SELECTOR,
+    SUPPORT_EMAIL: process.env.SUPPORT_EMAIL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
