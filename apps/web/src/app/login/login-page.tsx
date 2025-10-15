@@ -127,17 +127,17 @@ export default function LoginPage({
       <div className="flex flex-col gap-6">
         <Image
           src={"/logo-squircle.png"}
-          alt="useSend"
+          alt={process.env.USESEND_APP_NAME ?? "useSend"}
           width={50}
           height={50}
           className="mx-auto"
         />
         <div>
           <p className="text-2xl text-center font-semibold">
-            {isSignup ? "Create new account" : "Sign into useSend"}
+            {isSignup ? "Create new account" : `Sign into ${process.env.USESEND_APP_NAME ?? "useSend"}`}
           </p>
           <p className="text-center mt-2 text-sm text-muted-foreground">
-            {isSignup ? "Already have an account?" : "New to useSend?"}
+            {isSignup ? "Already have an account?" : `New to ${process.env.USESEND_APP_NAME ?? "useSend"}?`}
             <Link
               href={isSignup ? "/login" : "/signup"}
               className=" text-foreground hover:underline ml-1"

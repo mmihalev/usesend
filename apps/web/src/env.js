@@ -65,6 +65,10 @@ export const env = createEnv({
     STRIPE_WEBHOOK_SECRET: z.string().optional(),
     SMTP_HOST: z.string().default("smtp.usesend.com"),
     SMTP_USER: z.string().default("usesend"),
+    USESEND_META_TITLE: z.string().default("useSend"),
+    USESEND_META_DESCRIPTION: z.string().default("Open source email platform"),
+    USESEND_META_ICON: z.string().default("/favicon.ico"),
+    USESEND_APP_NAME: z.string().default("useSend"),
   },
 
   /**
@@ -120,6 +124,10 @@ export const env = createEnv({
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     SMTP_HOST: process.env.SMTP_HOST,
     SMTP_USER: process.env.SMTP_USER,
+    USESEND_META_TITLE: process.env.USESEND_META_TITLE,
+    USESEND_META_DESCRIPTION: process.env.USESEND_META_DESCRIPTION,
+    USESEND_META_ICON: process.env.USESEND_META_ICON,
+    USESEND_APP_NAME: process.env.USESEND_APP_NAME,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
