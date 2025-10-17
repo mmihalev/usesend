@@ -51,3 +51,5 @@ docker-compose.prod.yml
 
 # Cloudflare API token file
 .cloudflare.ini
+
+apps/smtp-server/certs/
