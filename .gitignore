@@ -48,3 +48,6 @@ memory-analysis-report.html
 
 # Production docker compose files
 docker-compose.prod.yml
+
+# Cloudflare API token file
+.cloudflare.ini
