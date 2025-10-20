@@ -1,25 +1,52 @@
 name: usesend-smtp-server
 
 services:
+  cert-dumper:
+    image: ldez/traefik-certs-dumper:v2.10
+    container_name: cert-dumper
+    restart: unless-stopped
+    environment:
+      - TZ=UTC
+    labels:
+      - "traefik.enable=true"
+      # Direct Traefik to a dummy URL so it won't try to inspect this container's IP.
+      - "traefik.http.services.certs-dumper-usesend-smtp-server.loadbalancer.server.url=http://127.0.0.1:65535"
+      - "traefik.http.routers.smtp-out.rule=Host(`$${SMTP_HOST:-usesend.com}`)"
+      - "traefik.http.routers.smtp-out.entrypoints=websecure"
+      - "traefik.http.routers.smtp-out.tls=true"
+      - "traefik.http.routers.smtp-out.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.smtp-out.tls.domains[0].main=$${SMTP_HOST:-usesend.com}"
+      - "traefik.http.routers.smtp-out.service=noop@internal"
+      - "traefik.docker.network=proxy"
+    networks:
+      - proxy
+    command:
+      - file
+      - --watch
+      - --version=v2
+      - --source=/acme/acme.json
+      - --dest=/certs
+      - --domain-subdir
+      - --crt-name=fullchain
+      - --key-name=privatekey
+      - --crt-ext=.pem
+      - --key-ext=.pem
+    volumes:
+      - ${TRAEFIK_ACME_PATH:?TRAEFIK_ACME_PATH must point to Traefik acme.json}:/acme/acme.json:ro
+      - cert-dumper:/certs
   smtp-server:
     container_name: usesend-smtp-server
     build:
       context: .
       dockerfile: Dockerfile
-    # Pass necessary environment variables
     environment:
-      SMTP_AUTH_USERNAME: "usesend" # can be anything, just use the same while sending emails
-      USESEND_BASE_URL: "https://app.usesend.com" # your self hosted useSend instance url
-
-      # Uncomment this if you have SSL certificates. port 465 and 2465 will be using SSL
-      # USESEND_API_KEY_PATH: "/certs/server.key"
-      # USESEND_API_CERT_PATH: "/certs/server.crt"
-    # If you have SSL certificates, mount them here (read-only recommended)
-
-    # volumes:
-    #   - ./certs/server.key:/certs/server.key:ro
-    #   - ./certs/server.crt:/certs/server.crt:ro
-
+      SMTP_AUTH_USERNAME: "sendit"
+      USESEND_BASE_URL: ${USESEND_BASE_URL}
+      USESEND_API_KEY_PATH: ${USESEND_API_KEY_PATH}
+      USESEND_API_CERT_PATH: ${USESEND_API_CERT_PATH}
+      NODE_ENV: "production"
+    volumes:
+      - cert-dumper:/certs:ro
     # Expose the SMTP ports
     ports:
       - "25:25"
@@ -29,3 +56,10 @@ services:
       - "2465:2465"
     # Restart always or on-failure, depending on preference
     restart: unless-stopped
+
+volumes:
+  cert-dumper:
+
+networks:
+  proxy:
+    external: true
