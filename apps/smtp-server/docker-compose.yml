@@ -3,7 +3,9 @@ name: usesend-smtp-server
 services:
   smtp-server:
     container_name: usesend-smtp-server
-    image: usesend/smtp-proxy:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     # Pass necessary environment variables
     environment:
       SMTP_AUTH_USERNAME: "usesend" # can be anything, just use the same while sending emails
