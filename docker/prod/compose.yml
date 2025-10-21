@@ -30,7 +30,10 @@ services:
     command: ["redis-server", "--maxmemory-policy", "noeviction"]
 
   usesend:
-    image: usesend/usesend:latest
+    #image: usesend/usesend:latest
+    build:
+      context: ../..
+      dockerfile: docker/Dockerfile
     container_name: usesend
     restart: always
     ports:
