@@ -14,10 +14,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    # ports:
-    #   - "5432:5432"
+    ports:
+       - "127.0.0.1:54320:5432"
     volumes:
       - database:/var/lib/postgresql/data
+    networks:
+      - usesend
 
   redis:
     image: redis:7
@@ -28,6 +30,8 @@ services:
     volumes:
       - cache:/data
     command: ["redis-server", "--maxmemory-policy", "noeviction"]
+    networks:
+      - usesend
 
   usesend:
     #image: usesend/usesend:latest
@@ -80,6 +84,22 @@ services:
       - USESEND_DKIM_SELECTOR=${USESEND_DKIM_SELECTOR}
       - SUPPORT_EMAIL=${SUPPORT_EMAIL}
       - AUTH_EMAIL_RATE_LIMIT=${AUTH_EMAIL_RATE_LIMIT:-5}
+    labels:
+      - "traefik.enable=true"
+      # HTTPS router
+      - "traefik.http.routers.usesend.rule=Host(`${USESEND_BASE_HOST}`)"
+      - "traefik.http.routers.usesend.entrypoints=websecure"
+      - "traefik.http.routers.usesend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.usesend.tls=true"
+      - "traefik.http.services.usesend.loadbalancer.server.port=${PORT:-3000}"
+      # HTTP router for redirect
+      - "traefik.http.routers.usesend-http.rule=Host(`${USESEND_BASE_HOST}`)"
+      - "traefik.http.routers.usesend-http.entrypoints=web"
+      - "traefik.http.routers.usesend-http.middlewares=usesend-https-redirect"
+      - "traefik.http.middlewares.usesend-https-redirect.redirectscheme.scheme=https"
+    networks:
+      - proxy
+      - usesend
     depends_on:
       postgres:
         condition: service_healthy
@@ -90,3 +110,8 @@ volumes:
   database:
   cache:
   storage:
+
+networks:
+  usesend:
+  proxy:
+    external: true
