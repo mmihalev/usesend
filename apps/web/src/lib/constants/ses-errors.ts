@@ -1,4 +1,6 @@
-const APP_NAME = process.env.USESEND_APP_NAME ?? "useSend";
+import { env } from "~/env";
+
+const APP_NAME = env.USESEND_APP_NAME ?? "useSend";
 const withAppName = (text: string) => text.replace(/useSend/g, APP_NAME);
 
 export const DELIVERY_DELAY_ERRORS = {

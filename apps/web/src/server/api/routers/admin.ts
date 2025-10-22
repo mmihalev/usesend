@@ -308,7 +308,7 @@ export const adminRouter = createTRPCRouter({
         "",
         "",
         "cheers,",
-        `Support Team - ${(process.env.NEXTAUTH_URL ?? "https://usesend.com").replace(
+        `Support Team - ${(env.USESEND_BASE_URL ?? env.NEXTAUTH_URL ?? "https://usesend.com").replace(
           /^https?:\/\//,
           "",
         )}`,

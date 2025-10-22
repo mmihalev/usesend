@@ -5,6 +5,7 @@ import {
   renderUsageWarningEmail,
   renderUsageLimitReachedEmail,
 } from "~/server/email-templates";
+import { env } from "~/env";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -20,13 +21,13 @@ export async function GET(request: NextRequest) {
     if (type === "otp") {
       html = await renderOtpEmail({
         otpCode: "ABC123",
-        loginUrl: `${process.env.NEXTAUTH_URL || "https://app.usesend.com"}/login?token=abc123`,
-        hostName: process.env.USESEND_APP_NAME || "useSend",
+        loginUrl: `${env.USESEND_BASE_URL ?? env.NEXTAUTH_URL ?? "https://app.usesend.com"}/login?token=abc123`,
+        hostName: env.USESEND_APP_NAME ?? "useSend",
       });
     } else if (type === "invite") {
       html = await renderTeamInviteEmail({
         teamName: "My Awesome Team",
-        inviteUrl: `${process.env.NEXTAUTH_URL || "https://app.usesend.com"}/join-team?inviteId=123`,
+        inviteUrl: `${env.USESEND_BASE_URL ?? env.NEXTAUTH_URL ?? "https://app.usesend.com"}/join-team?inviteId=123`,
         inviterName: "John Doe",
         role: "admin",
       });
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
         used: 8000,
         limit: 10000,
         period: period as "daily" | "monthly",
-        manageUrl: `${process.env.NEXTAUTH_URL || "https://app.usesend.com"}/settings/billing`,
+        manageUrl: `${env.USESEND_BASE_URL ?? env.NEXTAUTH_URL ?? "https://app.usesend.com"}/settings/billing`,
         isPaidPlan: isPaidPlan,
       });
     } else if (type === "usage-limit") {
@@ -49,7 +50,7 @@ export async function GET(request: NextRequest) {
         teamName: "Acme Inc",
         limit: 10000,
         period: period as "daily" | "monthly",
-        manageUrl: `${process.env.NEXTAUTH_URL || "https://app.usesend.com"}/settings/billing`,
+        manageUrl: `${env.USESEND_BASE_URL ?? env.NEXTAUTH_URL ?? "https://app.usesend.com"}/settings/billing`,
         isPaidPlan: isPaidPlan,
       });
     } else {

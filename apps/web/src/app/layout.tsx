@@ -21,10 +21,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: process.env.USESEND_META_TITLE || "useSend",
-  description:
-    process.env.USESEND_META_DESCRIPTION || "Open source email platform",
-  icons: [{ rel: "icon", url: process.env.USESEND_META_ICON || "/favicon.ico" }],
+  title: env.USESEND_META_TITLE || "useSend",
+  description: env.USESEND_META_DESCRIPTION || "Open source email platform",
+  icons: [{ rel: "icon", url: env.USESEND_META_ICON || "/favicon.ico" }],
 };
 
 export default async function RootLayout({

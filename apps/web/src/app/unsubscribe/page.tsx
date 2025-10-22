@@ -1,5 +1,6 @@
 import { unsubscribeContactFromLink } from "~/server/service/campaign-service";
 import ReSubscribe from "./re-subscribe";
+import { env } from "~/env";
 
 export const dynamic = "force-dynamic";
 
@@ -8,8 +9,8 @@ async function UnsubscribePage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const appName = process.env.USESEND_APP_NAME ?? "useSend";
-  const appUrl = process.env.NEXTAUTH_URL ?? "https://usesend.com";
+  const appName = env.USESEND_APP_NAME ?? "useSend";
+  const appUrl = env.USESEND_BASE_URL ?? env.NEXTAUTH_URL ?? "https://usesend.com";
 
   const params = await searchParams;
 

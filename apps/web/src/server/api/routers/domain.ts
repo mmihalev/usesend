@@ -91,9 +91,7 @@ export const domainRouter = createTRPCRouter({
 
       const appName = env.USESEND_APP_NAME ?? "useSend";
       const dashboardUrl =
-        process.env.NEXTAUTH_URL ??
-        env.NEXTAUTH_URL ??
-        "https://app.usesend.com";
+        env.USESEND_BASE_URL ?? env.NEXTAUTH_URL ?? "https://app.usesend.com";
       const subject = `${appName} test email`;
       const text = [
         "Hello,",
