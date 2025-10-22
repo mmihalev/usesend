@@ -53,7 +53,15 @@
         "SMTP_HOST",
         "SMTP_USER",
         "API_RATE_LIMIT",
-        "AUTH_EMAIL_RATE_LIMIT"
+        "AUTH_EMAIL_RATE_LIMIT",
+        "USESEND_DKIM_SELECTOR",
+        "USESEND_META_TITLE",
+        "USESEND_META_DESCRIPTION",
+        "USESEND_META_ICON",
+        "USESEND_APP_NAME",
+        "USESEND_DOCS_URL",
+        "USESEND_BASE_URL",
+        "SUPPORT_EMAIL"
       ]
     },
     "lint": {

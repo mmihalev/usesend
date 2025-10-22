@@ -73,6 +73,7 @@ export const env = createEnv({
     USESEND_DOCS_URL: z.string().default("https://docs.usesend.com"),
     USESEND_DKIM_SELECTOR: z.string().default("usesend"),
     SUPPORT_EMAIL: z.string().email().default("hey@usesend.com"),
+    USESEND_BASE_URL: z.string().url().default("https://app.usesend.com"),
   },
 
   /**
@@ -136,6 +137,7 @@ export const env = createEnv({
     USESEND_DOCS_URL: process.env.USESEND_DOCS_URL,
     USESEND_DKIM_SELECTOR: process.env.USESEND_DKIM_SELECTOR,
     SUPPORT_EMAIL: process.env.SUPPORT_EMAIL,
+    USESEND_BASE_URL: process.env.USESEND_BASE_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
