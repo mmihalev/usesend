@@ -2,7 +2,7 @@ import { Email, EmailStatus, Prisma } from "@prisma/client";
 import { format, subDays } from "date-fns";
 import { z } from "zod";
 import { DEFAULT_QUERY_LIMIT } from "~/lib/constants";
-import { BOUNCE_ERROR_MESSAGES } from "~/lib/constants/ses-errors";
+import { getBounceErrorMessages } from "~/lib/constants/ses-errors";
 import type { SesBounce } from "~/types/aws-types";
 
 import {
@@ -12,8 +12,12 @@ import {
 } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { cancelEmail, updateEmail } from "~/server/service/email-service";
+import { env } from "~/env";
 
 const statuses = Object.values(EmailStatus) as [EmailStatus];
+const BOUNCE_ERROR_MESSAGES = getBounceErrorMessages(
+  env.USESEND_APP_NAME ?? "useSend",
+);
 
 const ensureBounceObject = (
   data: Prisma.JsonValue,

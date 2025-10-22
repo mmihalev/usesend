@@ -16,16 +16,26 @@ import {
   SesOpen,
 } from "~/types/aws-types";
 import {
-  BOUNCE_ERROR_MESSAGES,
+  getBounceErrorMessages,
   COMPLAINT_ERROR_MESSAGES,
-  DELIVERY_DELAY_ERRORS,
+  getDeliveryDelayErrors,
 } from "~/lib/constants/ses-errors";
 import CancelEmail from "./cancel-email";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useState } from "react";
+import { useBranding } from "~/providers/branding-context";
 
 export default function EmailDetails({ emailId }: { emailId: string }) {
   const emailQuery = api.email.getEmail.useQuery({ id: emailId });
+  const { appName } = useBranding();
+  const deliveryDelayErrors = useMemo(
+    () => getDeliveryDelayErrors(appName),
+    [appName],
+  );
+  const bounceErrorMessages = useMemo(
+    () => getBounceErrorMessages(appName),
+    [appName],
+  );
 
   return (
     <div className="h-full overflow-auto px-4 no-scrollbar">
@@ -119,6 +129,8 @@ export default function EmailDetails({ emailId }: { emailId: string }) {
                           <EmailStatusText
                             status={evt.status}
                             data={evt.data}
+                            deliveryDelayErrors={deliveryDelayErrors}
+                            bounceErrorMessages={bounceErrorMessages}
                           />
                         </div>
                       </div>
@@ -165,9 +177,13 @@ const EmailPreview = ({ html }: { html: string }) => {
 const EmailStatusText = ({
   status,
   data,
+  deliveryDelayErrors,
+  bounceErrorMessages,
 }: {
   status: EmailStatus;
   data: JsonValue;
+  deliveryDelayErrors: ReturnType<typeof getDeliveryDelayErrors>;
+  bounceErrorMessages: ReturnType<typeof getBounceErrorMessages>;
 }) => {
   if (status === "SENT") {
     return (
@@ -179,7 +195,7 @@ const EmailStatusText = ({
     return <div>Mail is successfully delivered to the recipient.</div>;
   } else if (status === "DELIVERY_DELAYED") {
     const _errorData = data as unknown as SesDeliveryDelay;
-    const errorMessage = DELIVERY_DELAY_ERRORS[_errorData.delayType];
+    const errorMessage = deliveryDelayErrors[_errorData.delayType];
 
     return <div>{errorMessage}</div>;
   } else if (status === "BOUNCED") {
@@ -188,7 +204,7 @@ const EmailStatusText = ({
 
     return (
       <div className="flex flex-col gap-4 w-full">
-        <p>{getErrorMessage(_errorData)}</p>
+        <p>{getErrorMessage(_errorData, bounceErrorMessages)}</p>
         <div className="rounded-xl p-4 bg-muted/30 flex flex-col gap-4">
           <div className="flex gap-2 w-full">
             <div className="w-1/2">
@@ -280,9 +296,12 @@ const EmailStatusText = ({
   return <div className="w-full">{status}</div>;
 };
 
-const getErrorMessage = (data: SesBounce) => {
+const getErrorMessage = (
+  data: SesBounce,
+  bounceErrorMessages: ReturnType<typeof getBounceErrorMessages>,
+) => {
   if (data.bounceType === "Permanent") {
-    return BOUNCE_ERROR_MESSAGES[data.bounceType][
+    return bounceErrorMessages[data.bounceType][
       data.bounceSubType as
         | "General"
         | "NoEmail"
@@ -290,7 +309,7 @@ const getErrorMessage = (data: SesBounce) => {
         | "OnAccountSuppressionList"
     ];
   } else if (data.bounceType === "Transient") {
-    return BOUNCE_ERROR_MESSAGES[data.bounceType][
+    return bounceErrorMessages[data.bounceType][
       data.bounceSubType as
         | "General"
         | "MailboxFull"
@@ -299,7 +318,7 @@ const getErrorMessage = (data: SesBounce) => {
         | "AttachmentRejected"
     ];
   } else if (data.bounceType === "Undetermined") {
-    return BOUNCE_ERROR_MESSAGES.Undetermined;
+    return bounceErrorMessages.Undetermined;
   }
 };
 

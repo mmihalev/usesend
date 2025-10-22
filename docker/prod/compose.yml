@@ -43,6 +43,7 @@ services:
     ports:
       - ${PORT:-3000}:${PORT:-3000}
     environment:
+      - HOSTNAME=0.0.0.0
       - PORT=${PORT:-3000}
       - DATABASE_URL=${DATABASE_URL:?err}
       - NEXTAUTH_URL=${NEXTAUTH_URL:?err}
