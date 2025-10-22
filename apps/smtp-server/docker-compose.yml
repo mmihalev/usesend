@@ -7,15 +7,16 @@ services:
     restart: unless-stopped
     environment:
       - TZ=UTC
+      - SMTP_HOST=${SMTP_HOST?:SMTP_HOST must be set}
     labels:
       - "traefik.enable=true"
       # Direct Traefik to a dummy URL so it won't try to inspect this container's IP.
       - "traefik.http.services.certs-dumper-usesend-smtp-server.loadbalancer.server.url=http://127.0.0.1:65535"
-      - "traefik.http.routers.smtp-out.rule=Host(`$${SMTP_HOST:-usesend.com}`)"
+      - "traefik.http.routers.smtp-out.rule=Host(`${SMTP_HOST}`)"
       - "traefik.http.routers.smtp-out.entrypoints=websecure"
       - "traefik.http.routers.smtp-out.tls=true"
       - "traefik.http.routers.smtp-out.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.smtp-out.tls.domains[0].main=$${SMTP_HOST:-usesend.com}"
+      - "traefik.http.routers.smtp-out.tls.domains[0].main=${SMTP_HOST}"
       - "traefik.http.routers.smtp-out.service=noop@internal"
       - "traefik.docker.network=proxy"
     networks:
