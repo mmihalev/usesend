@@ -14,15 +14,15 @@ on:
 jobs:
   build_and_publish_platform_containers:
     name: Build and publish platform containers
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     permissions:
       packages: write
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - warp-ubuntu-latest-x64-2x
-          - warp-ubuntu-latest-arm64-2x
+        platform:
+          - linux/amd64
+          - linux/arm64
         app:
           - name: usesend
             dockerfile: ./docker/Dockerfile
@@ -54,37 +54,41 @@ jobs:
 
       - name: Build the docker image
         env:
-          BUILD_PLATFORM: ${{ matrix.os == 'warp-ubuntu-latest-arm64-2x' && 'arm64' || 'amd64' }}
+          BUILD_PLATFORM: ${{ matrix.platform }}
           APP: ${{ matrix.app.name }}
           DOCKER_FILE: ${{ matrix.app.dockerfile }}
           CONTEXT: ${{ matrix.app.context }}
         run: |
           APP_VERSION="$(git name-rev --tags --name-only $(git rev-parse HEAD) | head -n 1 | sed 's/\^0//')"
           GIT_SHA="$(git rev-parse HEAD)"
+          BUILD_ARCH="${BUILD_PLATFORM#*/}"
 
           docker build \
+            --platform "$BUILD_PLATFORM" \
             -f "$DOCKER_FILE" \
             --progress=plain \
-            -t "bitmesh/$APP-$BUILD_PLATFORM:latest" \
-            -t "bitmesh/$APP-$BUILD_PLATFORM:$GIT_SHA" \
-            -t "bitmesh/$APP-$BUILD_PLATFORM:$APP_VERSION" \
-            -t "ghcr.io/mmihalev/$APP-$BUILD_PLATFORM:latest" \
-            -t "ghcr.io/mmihalev/$APP-$BUILD_PLATFORM:$GIT_SHA" \
-            -t "ghcr.io/mmihalev/$APP-$BUILD_PLATFORM:$APP_VERSION" \
+            -t "bitmesh/$APP-$BUILD_ARCH:latest" \
+            -t "bitmesh/$APP-$BUILD_ARCH:$GIT_SHA" \
+            -t "bitmesh/$APP-$BUILD_ARCH:$APP_VERSION" \
+            -t "ghcr.io/mmihalev/$APP-$BUILD_ARCH:latest" \
+            -t "ghcr.io/mmihalev/$APP-$BUILD_ARCH:$GIT_SHA" \
+            -t "ghcr.io/mmihalev/$APP-$BUILD_ARCH:$APP_VERSION" \
             "$CONTEXT"
 
       - name: Push the docker image to DockerHub
-        run: docker push --all-tags "bitmesh/$APP-$BUILD_PLATFORM"
+        run: |
+          BUILD_ARCH="${BUILD_PLATFORM#*/}"
+          docker push --all-tags "bitmesh/$APP-$BUILD_ARCH"
         env:
-          BUILD_PLATFORM: ${{ matrix.os == 'warp-ubuntu-latest-arm64-2x' && 'arm64' || 'amd64' }}
+          BUILD_PLATFORM: ${{ matrix.platform }}
           APP: ${{ matrix.app.name }}
-          DOCKER_FILE: ${{ matrix.app.dockerfile }}
-          CONTEXT: ${{ matrix.app.context }}
 
       - name: Push the docker image to GitHub Container Registry
-        run: docker push --all-tags "ghcr.io/mmihalev/$APP-$BUILD_PLATFORM"
+        run: |
+          BUILD_ARCH="${BUILD_PLATFORM#*/}"
+          docker push --all-tags "ghcr.io/mmihalev/$APP-$BUILD_ARCH"
         env:
-          BUILD_PLATFORM: ${{ matrix.os == 'warp-ubuntu-latest-arm64-2x' && 'arm64' || 'amd64' }}
+          BUILD_PLATFORM: ${{ matrix.platform }}
           APP: ${{ matrix.app.name }}
 
   create_and_publish_manifest:
