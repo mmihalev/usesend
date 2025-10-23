@@ -34,7 +34,7 @@ services:
       - usesend
 
   usesend:
-    image: usesend/usesend:latest
+    image: bitmesh/usesend:latest
     container_name: usesend
     restart: always
     ports:

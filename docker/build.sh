@@ -17,10 +17,7 @@ echo "Git SHA: $GIT_SHA"
 
 docker build -f "$SCRIPT_DIR/Dockerfile" \
     --progress=plain \
-    -t "unsend/unsend:latest" \
-    -t "unsend/unsend:$GIT_SHA" \
-    -t "unsend/unsend:$APP_VERSION" \
-    -t "ghcr.io/unsend-dev/unsend:latest" \
-    -t "ghcr.io/unsend-dev/unsend:$GIT_SHA" \
-    -t "ghcr.io/unsend-dev/unsend:$APP_VERSION" \
+    -t "bitmesh/unsend:latest" \
+    -t "bitmesh/unsend:$GIT_SHA" \
+    -t "bitmesh/unsend:$APP_VERSION" \
     "$MONOREPO_ROOT"
