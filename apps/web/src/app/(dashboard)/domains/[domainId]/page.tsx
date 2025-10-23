@@ -29,6 +29,7 @@ import Link from "next/link";
 import { toast } from "@usesend/ui/src/toaster";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "~/server/api/root";
+import { useBranding } from "~/providers/branding-context";
 
 type RouterOutputs = inferRouterOutputs<AppRouter>;
 type DomainResponse = NonNullable<RouterOutputs["domain"]["getDomain"]>;
@@ -174,6 +175,7 @@ export default function DomainItemPage({
 }
 
 const DomainSettings: React.FC<{ domain: DomainResponse }> = ({ domain }) => {
+  const { appName } = useBranding();
   const updateDomain = api.domain.updateDomain.useMutation();
   const utils = api.useUtils();
 
@@ -225,9 +227,9 @@ const DomainSettings: React.FC<{ domain: DomainResponse }> = ({ domain }) => {
       <div className="flex flex-col gap-1">
         <div className="font-semibold">Open tracking</div>
         <p className=" text-muted-foreground text-sm">
-          Unsend adds a tracking pixel to every email you send. This allows you
-          to see how many people open your emails. This will affect the delivery
-          rate of your emails.
+          {appName} adds a tracking pixel to every email you send. This allows
+          you to see how many people open your emails. This will affect the
+          delivery rate of your emails.
         </p>
         <Switch
           checked={openTracking}
