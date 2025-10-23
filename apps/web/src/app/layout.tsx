@@ -6,9 +6,9 @@ import { ThemeProvider } from "@usesend/ui";
 import { Toaster } from "@usesend/ui/src/toaster";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { Metadata } from "next";
 import { BrandingProvider } from "~/providers/branding-context";
 import { env } from "~/env";
+import type { Metadata } from "next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,11 +20,15 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
-export const metadata: Metadata = {
-  title: env.USESEND_META_TITLE || "useSend",
-  description: env.USESEND_META_DESCRIPTION || "Open source email platform",
-  icons: [{ rel: "icon", url: env.USESEND_META_ICON || "/favicon.ico" }],
-};
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: env.USESEND_META_TITLE || "useSend",
+    description: env.USESEND_META_DESCRIPTION || "Open source email platform",
+    icons: [{ rel: "icon", url: env.USESEND_META_ICON || "/favicon.ico" }],
+  };
+}
 
 export default async function RootLayout({
   children,
