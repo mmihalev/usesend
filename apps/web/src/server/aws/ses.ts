@@ -100,9 +100,13 @@ export async function addDomain(
   });
   const response = await sesClient.send(command);
 
+  const prefix = env.USESEND_SUBDOMAIN_PREFIX ?? "mail";
+  const effectivePrefix = prefix || "mail";
+  const mailFromDomain = `${effectivePrefix}.${domain}`;
+
   const emailIdentityCommand = new PutEmailIdentityMailFromAttributesCommand({
     EmailIdentity: domain,
-    MailFromDomain: `mail.${domain}`,
+    MailFromDomain: mailFromDomain,
   });
 
   const emailIdentityResponse = await sesClient.send(emailIdentityCommand);

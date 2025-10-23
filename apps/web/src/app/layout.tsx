@@ -20,15 +20,11 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
-export const dynamic = "force-dynamic";
-
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: env.USESEND_META_TITLE || "useSend",
-    description: env.USESEND_META_DESCRIPTION || "Open source email platform",
-    icons: [{ rel: "icon", url: env.USESEND_META_ICON || "/favicon.ico" }],
-  };
-}
+export const metadata: Metadata = {
+  title: env.USESEND_META_TITLE || "useSend",
+  description: env.USESEND_META_DESCRIPTION || "Open source email platform",
+  icons: [{ rel: "icon", url: env.USESEND_META_ICON || "/favicon.ico" }],
+};
 
 export default async function RootLayout({
   children,

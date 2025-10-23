@@ -29,7 +29,9 @@ function parseDomainStatus(status?: string | null): DomainStatus {
 
 function buildDnsRecords(domain: Domain): DomainDnsRecord[] {
   const subdomainSuffix = domain.subdomain ? `.${domain.subdomain}` : "";
-  const mailDomain = `mail${subdomainSuffix}`;
+  const prefix = env.USESEND_SUBDOMAIN_PREFIX ?? "mail";
+  const effectivePrefix = prefix || "mail";
+  const mailDomain = `${effectivePrefix}${subdomainSuffix}`;
   const dkimSelector =
     domain.dkimSelector ?? env.USESEND_DKIM_SELECTOR ?? "usesend";
 
