@@ -124,18 +124,18 @@ jobs:
           for APP_NAME in usesend smtp-proxy; do
             docker manifest create \
               bitmesh/$APP_NAME:latest \
-              --amend bitmesh/$APP_NAME-amd64:latest \
-              --amend bitmesh/$APP_NAME-arm64:latest
+              --amend bitmesh/$APP_NAME-amd64:latest
+              # --amend bitmesh/$APP_NAME-arm64:latest
 
             docker manifest create \
               bitmesh/$APP_NAME:$GIT_SHA \
-              --amend bitmesh/$APP_NAME-amd64:$GIT_SHA \
-              --amend bitmesh/$APP_NAME-arm64:$GIT_SHA
+              --amend bitmesh/$APP_NAME-amd64:$GIT_SHA
+              # --amend bitmesh/$APP_NAME-arm64:$GIT_SHA
 
             docker manifest create \
               bitmesh/$APP_NAME:$APP_VERSION \
-              --amend bitmesh/$APP_NAME-amd64:$APP_VERSION \
-              --amend bitmesh/$APP_NAME-arm64:$APP_VERSION
+              --amend bitmesh/$APP_NAME-amd64:$APP_VERSION
+              # --amend bitmesh/$APP_NAME-arm64:$APP_VERSION
 
             docker manifest push bitmesh/$APP_NAME:latest
             docker manifest push bitmesh/$APP_NAME:$GIT_SHA
@@ -150,18 +150,18 @@ jobs:
           for APP_NAME in usesend smtp-proxy; do
             docker manifest create \
               ghcr.io/mmihalev/$APP_NAME:latest \
-              --amend ghcr.io/mmihalev/$APP_NAME-amd64:latest \
-              --amend ghcr.io/mmihalev/$APP_NAME-arm64:latest
+              --amend ghcr.io/mmihalev/$APP_NAME-amd64:latest
+              # --amend ghcr.io/mmihalev/$APP_NAME-arm64:latest
 
             docker manifest create \
               ghcr.io/mmihalev/$APP_NAME:$GIT_SHA \
-              --amend ghcr.io/mmihalev/$APP_NAME-amd64:$GIT_SHA \
-              --amend ghcr.io/mmihalev/$APP_NAME-arm64:$GIT_SHA
+              --amend ghcr.io/mmihalev/$APP_NAME-amd64:$GIT_SHA
+              # --amend ghcr.io/mmihalev/$APP_NAME-arm64:$GIT_SHA
 
             docker manifest create \
               ghcr.io/mmihalev/$APP_NAME:$APP_VERSION \
-              --amend ghcr.io/mmihalev/$APP_NAME-amd64:$APP_VERSION \
-              --amend ghcr.io/mmihalev/$APP_NAME-arm64:$APP_VERSION
+              --amend ghcr.io/mmihalev/$APP_NAME-amd64:$APP_VERSION
+              # --amend ghcr.io/mmihalev/$APP_NAME-arm64:$APP_VERSION
 
             docker manifest push ghcr.io/mmihalev/$APP_NAME:latest
             docker manifest push ghcr.io/mmihalev/$APP_NAME:$GIT_SHA
