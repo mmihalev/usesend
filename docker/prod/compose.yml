@@ -34,7 +34,21 @@ services:
       - usesend
 
   usesend:
-    image: bitmesh/usesend:latest
+    #image: bitmesh/usesend:latest
+    build:
+      context: ../..
+      dockerfile: ./docker/Dockerfile
+      args:
+        USESEND_META_TITLE: ${USESEND_META_TITLE}
+        USESEND_META_DESCRIPTION: ${USESEND_META_DESCRIPTION}
+        USESEND_META_ICON: ${USESEND_META_ICON}
+        USESEND_APP_NAME: ${USESEND_APP_NAME}
+        USESEND_DOCS_URL: ${USESEND_DOCS_URL}
+        USESEND_BASE_URL: ${USESEND_BASE_URL}
+        SUPPORT_EMAIL: ${SUPPORT_EMAIL}
+        USESEND_DKIM_SELECTOR: ${USESEND_DKIM_SELECTOR}
+        USESEND_SUBDOMAIN_PREFIX: ${USESEND_SUBDOMAIN_PREFIX}
+        NEXT_PUBLIC_IS_CLOUD: ${NEXT_PUBLIC_IS_CLOUD}
     container_name: usesend
     restart: always
     ports:
