@@ -18,6 +18,8 @@ services:
        - "127.0.0.1:54320:5432"
     volumes:
       - database:/var/lib/postgresql/data
+    networks:
+      - usesend
 
   redis:
     image: redis:7
@@ -28,6 +30,8 @@ services:
     volumes:
       - cache:/data
     command: ["redis-server", "--maxmemory-policy", "noeviction"]
+    networks:
+      - usesend
 
   usesend:
     #image: bitmesh/usesend:latest
@@ -106,6 +110,8 @@ services:
       - "traefik.http.routers.usesend-http.entrypoints=web"
       - "traefik.http.routers.usesend-http.middlewares=usesend-https-redirect"
       - "traefik.http.middlewares.usesend-https-redirect.redirectscheme.scheme=https"
+    networks:
+      - usesend
     depends_on:
       postgres:
         condition: service_healthy
@@ -116,3 +122,6 @@ volumes:
   database:
   cache:
   storage:
+
+networks:
+  usesend:
