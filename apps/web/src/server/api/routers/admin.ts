@@ -248,7 +248,7 @@ export const adminRouter = createTRPCRouter({
         const appUrl =
           env.NEXTAUTH_URL ??
           "https://app.usesend.com";
-        const text = `Hey ${userFirstName},\n\nThanks for hanging in while we reviewed your waitlist request. I've just moved your account off the waitlist, so you now have full access to ${appName}.\n\nGo ahead and log back in to start sending: ${appUrl}\n\nIf anything feels unclear or you want help getting set up, reply to this email and it comes straight to me.\n\nCheers,\n${founderName}\n${replyTo}`;
+        const text = `Hey ${userFirstName},\n\nThanks for hanging in while we reviewed your waitlist request. I've just moved your account off the waitlist, so you now have full access to ${appName}.\n\nGo ahead and log back in to start sending: ${appUrl}\n\nIf anything feels unclear or you want help getting set up, reply to this email and it comes straight to me.\n\nCheers,\n${appName}\n${replyTo}`;
 
         try {
           await sendMail(
@@ -308,7 +308,7 @@ export const adminRouter = createTRPCRouter({
         "",
         "",
         "cheers,",
-        `Support Team - ${(env.USESEND_BASE_URL ?? env.NEXTAUTH_URL ?? "https://usesend.com").replace(
+        `${(env.USESEND_APP_NAME ?? "useSend")} Support Team - ${(env.USESEND_BASE_URL ?? env.NEXTAUTH_URL ?? "https://usesend.com").replace(
           /^https?:\/\//,
           "",
         )}`,
