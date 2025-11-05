@@ -258,7 +258,7 @@ export default function EmailsList() {
       <div className="flex flex-col rounded-xl border shadow">
         <Table className="">
           <TableHeader className="">
-            <TableRow className=" bg-muted dark:bg-muted/70">
+            <TableRow className=" bg-muted dark:bg-muted/30">
               <TableHead className="rounded-tl-xl">To</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Subject</TableHead>
