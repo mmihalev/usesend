@@ -4,6 +4,7 @@ import {
   BookUser,
   Code,
   Cog,
+  MessageSquare,
   Globe,
   LayoutTemplate,
   Mail,
@@ -35,7 +36,7 @@ import {
 import Link from "next/link";
 import { MiniThemeSwitcher, ThemeSwitcher } from "./theme/ThemeSwitcher";
 import { useSession } from "next-auth/react";
-import { isSelfHosted } from "~/utils/common";
+import { isCloud, isSelfHosted } from "~/utils/common";
 import { usePathname } from "next/navigation";
 import { Badge } from "@usesend/ui/src/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@usesend/ui/src/avatar";
@@ -50,6 +51,7 @@ import {
   DropdownMenuTrigger,
 } from "@usesend/ui/src/dropdown-menu";
 import { useBranding } from "~/providers/branding-context";
+import { FeedbackDialog } from "./FeedbackDialog";
 
 // General items
 const generalItems = [
@@ -120,6 +122,7 @@ export function AppSidebar() {
   const { data: session } = useSession();
   const { state, open } = useSidebar();
   const { appName, docsUrl } = useBranding();
+  const showFeedback = isCloud();
 
   const pathname = usePathname();
 
@@ -235,6 +238,18 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarGroupContent>
           <SidebarMenu>
+            {showFeedback ? (
+              <SidebarMenuItem>
+                <FeedbackDialog
+                  trigger={
+                    <SidebarMenuButton tooltip="Feedback">
+                      <MessageSquare />
+                      <span>Feedback</span>
+                    </SidebarMenuButton>
+                  }
+                />
+              </SidebarMenuItem>
+            ) : null}
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip="Docs">
                 <Link href={docsUrl} target="_blank">

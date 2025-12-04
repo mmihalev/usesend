@@ -75,6 +75,10 @@ export const env = createEnv({
     SUPPORT_EMAIL: z.string().email().default("hey@usesend.com"),
     USESEND_BASE_URL: z.string().url().default("https://app.usesend.com"),
     USESEND_SUBDOMAIN_PREFIX: z.string().default("mail"),
+    EMAIL_CLEANUP_DAYS: z
+        .string()
+        .optional()
+        .transform((str) => (str ? parseInt(str, 10) : undefined)),
   },
 
   /**
@@ -140,6 +144,7 @@ export const env = createEnv({
     SUPPORT_EMAIL: process.env.SUPPORT_EMAIL,
     USESEND_BASE_URL: process.env.USESEND_BASE_URL,
     USESEND_SUBDOMAIN_PREFIX: process.env.USESEND_SUBDOMAIN_PREFIX,
+    EMAIL_CLEANUP_DAYS: process.env.EMAIL_CLEANUP_DAYS,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
