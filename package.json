@@ -43,6 +43,9 @@
   },
   "pnpm": {
     "overrides": {
+      "@hookform/resolvers": "5.0.1",
+      "stripe": "18.0.0",
+      "zod": "3.24.3",
       "shiki": "3.3.0"
     }
   }
