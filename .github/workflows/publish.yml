@@ -67,6 +67,8 @@ jobs:
             --platform "$BUILD_PLATFORM" \
             -f "$DOCKER_FILE" \
             --progress=plain \
+            --build-arg APP_VERSION="$APP_VERSION" \
+            --build-arg GIT_SHA="$GIT_SHA" \
             -t "bitmesh/$APP-$BUILD_ARCH:latest" \
             -t "bitmesh/$APP-$BUILD_ARCH:$GIT_SHA" \
             -t "bitmesh/$APP-$BUILD_ARCH:$APP_VERSION" \
