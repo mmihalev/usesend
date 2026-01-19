@@ -1,10 +1,5 @@
-const withAppName = (text: string, appName: string) =>
-  text.replace(/useSend/g, appName);
-
-export const getDeliveryDelayErrors = (appName = "useSend") => ({
-  InternalFailure: withAppName(
-    "An internal useSend issue caused the message to be delayed.",
-  appName),
+export const DELIVERY_DELAY_ERRORS = {
+  InternalFailure: "An internal useSend issue caused the message to be delayed.",
   General: "A generic failure occurred during the SMTP conversation.",
   MailboxFull:
     "The recipient's mailbox is full and is unable to receive additional messages.",
@@ -16,53 +11,39 @@ export const getDeliveryDelayErrors = (appName = "useSend") => ({
     "The IP address that's sending the message is being blocked or throttled by the recipient's email provider.",
   TransientCommunicationFailure:
     "There was a temporary communication failure during the SMTP conversation with the recipient's email provider.",
-  BYOIPHostNameLookupUnavailable: withAppName(
+  BYOIPHostNameLookupUnavailable:
     "useSend was unable to look up the DNS hostname for your IP addresses. This type of delay only occurs when you use Bring Your Own IP.",
-  appName),
-  Undetermined: withAppName(
+  Undetermined:
     "useSend wasn't able to determine the reason for the delivery delay.",
-  appName),
-  SendingDeferral: withAppName(
+  SendingDeferral:
     "useSend has deemed it appropriate to internally defer the message.",
-  appName),
-});
+};
 
-export const getBounceErrorMessages = (appName = "useSend") => ({
-  Undetermined: withAppName(
-    "useSend was unable to determine a specific bounce reason.",
-  appName),
+export const BOUNCE_ERROR_MESSAGES = {
+  Undetermined: "useSend was unable to determine a specific bounce reason.",
   Permanent: {
-    General: withAppName(
+    General:
       "useSend received a general hard bounce. If you receive this type of bounce, you should remove the recipient's email address from your mailing list.",
-    appName),
-    NoEmail: withAppName(
+    NoEmail:
       "useSend received a permanent hard bounce because the target email address does not exist. If you receive this type of bounce, you should remove the recipient's email address from your mailing list.",
-    appName),
-    Suppressed: withAppName(
+    Suppressed:
       "useSend has suppressed sending to this address because it has a recent history of bouncing as an invalid address. To override the global suppression list, see Using the useSend account-level suppression list.",
-    appName),
-    OnAccountSuppressionList: withAppName(
+    OnAccountSuppressionList:
       "useSend has suppressed sending to this address because it is on the account-level suppression list. This does not count toward your bounce rate metric.",
-    appName),
   },
   Transient: {
-    General: withAppName(
+    General:
       "useSend received a general bounce. You may be able to successfully send to this recipient in the future.",
-    appName),
-    MailboxFull: withAppName(
+    MailboxFull:
       "useSend received a mailbox full bounce. You may be able to successfully send to this recipient in the future.",
-    appName),
-    MessageTooLarge: withAppName(
+    MessageTooLarge:
       "useSend received a message too large bounce. You may be able to successfully send to this recipient if you reduce the size of the message.",
-    appName),
-    ContentRejected: withAppName(
+    ContentRejected:
       "useSend received a content rejected bounce. You may be able to successfully send to this recipient if you change the content of the message.",
-    appName),
-    AttachmentRejected: withAppName(
+    AttachmentRejected:
       "useSend received an attachment rejected bounce. You may be able to successfully send to this recipient if you remove or change the attachment.",
-    appName),
   },
-});
+};
 
 export const COMPLAINT_ERROR_MESSAGES = {
   abuse: "Indicates unsolicited email or some other kind of email abuse.",

@@ -2,7 +2,7 @@ import { Email, EmailStatus, Prisma } from "@prisma/client";
 import { format, subDays } from "date-fns";
 import { z } from "zod";
 import { DEFAULT_QUERY_LIMIT } from "~/lib/constants";
-import { getBounceErrorMessages } from "~/lib/constants/ses-errors";
+import { BOUNCE_ERROR_MESSAGES } from "@usesend/lib/src";
 import type { SesBounce } from "~/types/aws-types";
 
 import {
@@ -12,12 +12,8 @@ import {
 } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { cancelEmail, updateEmail } from "~/server/service/email-service";
-import { env } from "~/env";
 
 const statuses = Object.values(EmailStatus) as [EmailStatus];
-const BOUNCE_ERROR_MESSAGES = getBounceErrorMessages(
-  env.USESEND_APP_NAME ?? "useSend",
-);
 
 const ensureBounceObject = (
   data: Prisma.JsonValue,
@@ -99,12 +95,12 @@ export const emailRouter = createTRPCRouter({
       const offset = (page - 1) * limit;
 
       const emails = await db.$queryRaw<Array<Email>>`
-        SELECT 
-          id, 
-          "createdAt", 
-          "latestStatus", 
-          subject, 
-          "to", 
+        SELECT
+          id,
+          "createdAt",
+          "latestStatus",
+          subject,
+          "to",
           "scheduledAt"
         FROM "Email"
         WHERE "teamId" = ${ctx.team.id}
@@ -114,9 +110,9 @@ export const emailRouter = createTRPCRouter({
         ${
           input.search
             ? Prisma.sql`AND (
-          "subject" ILIKE ${`%${input.search}%`} 
+          "subject" ILIKE ${`%${input.search}%`}
           OR EXISTS (
-            SELECT 1 FROM unnest("to") AS email 
+            SELECT 1 FROM unnest("to") AS email
             WHERE email ILIKE ${`%${input.search}%`}
           )
         )`
@@ -205,7 +201,12 @@ export const emailRouter = createTRPCRouter({
         } as const;
 
         if (email.latestStatus !== "BOUNCED" || !email.bounceData) {
-          return { ...base, bounceType: undefined, bounceSubType: undefined, bounceReason: undefined };
+          return {
+            ...base,
+            bounceType: undefined,
+            bounceSubType: undefined,
+            bounceReason: undefined,
+          };
         }
 
         const bounce = ensureBounceObject(email.bounceData);
@@ -213,7 +214,9 @@ export const emailRouter = createTRPCRouter({
         const bounceSubType = bounce?.bounceSubType
           ? bounce.bounceSubType.toString().trim().replace(/\s+/g, "")
           : undefined;
-        const bounceReason = bounce ? getBounceReasonFromParsed(bounce) : undefined;
+        const bounceReason = bounce
+          ? getBounceReasonFromParsed(bounce)
+          : undefined;
 
         return { ...base, bounceType, bounceSubType, bounceReason };
       });

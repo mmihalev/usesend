@@ -16,26 +16,18 @@ import {
   SesOpen,
 } from "~/types/aws-types";
 import {
-  getBounceErrorMessages,
+  BOUNCE_ERROR_MESSAGES,
   COMPLAINT_ERROR_MESSAGES,
-  getDeliveryDelayErrors,
-} from "~/lib/constants/ses-errors";
+  DELIVERY_DELAY_ERRORS,
+} from "@usesend/lib/src/constants/ses-errors";
 import CancelEmail from "./cancel-email";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
-import { useBranding } from "~/providers/branding-context";
 
 export default function EmailDetails({ emailId }: { emailId: string }) {
   const emailQuery = api.email.getEmail.useQuery({ id: emailId });
-  const { appName } = useBranding();
-  const deliveryDelayErrors = useMemo(
-    () => getDeliveryDelayErrors(appName),
-    [appName],
-  );
-  const bounceErrorMessages = useMemo(
-    () => getBounceErrorMessages(appName),
-    [appName],
-  );
+  const deliveryDelayErrors = DELIVERY_DELAY_ERRORS;
+  const bounceErrorMessages = BOUNCE_ERROR_MESSAGES;
 
   return (
     <div className="h-full overflow-auto px-4 no-scrollbar">
@@ -85,7 +77,7 @@ export default function EmailDetails({ emailId }: { emailId: string }) {
                 <span className="text-sm">
                   {formatDate(
                     emailQuery.data?.scheduledAt,
-                    "MMM dd'th', hh:mm a"
+                    "MMM dd'th', hh:mm a",
                   )}
                 </span>
                 <div className="ml-4">
@@ -182,8 +174,8 @@ const EmailStatusText = ({
 }: {
   status: EmailStatus;
   data: JsonValue;
-  deliveryDelayErrors: ReturnType<typeof getDeliveryDelayErrors>;
-  bounceErrorMessages: ReturnType<typeof getBounceErrorMessages>;
+  deliveryDelayErrors: typeof DELIVERY_DELAY_ERRORS;
+  bounceErrorMessages: typeof BOUNCE_ERROR_MESSAGES;
 }) => {
   if (status === "SENT") {
     return (
@@ -298,7 +290,7 @@ const EmailStatusText = ({
 
 const getErrorMessage = (
   data: SesBounce,
-  bounceErrorMessages: ReturnType<typeof getBounceErrorMessages>,
+  bounceErrorMessages: typeof BOUNCE_ERROR_MESSAGES,
 ) => {
   if (data.bounceType === "Permanent") {
     return bounceErrorMessages[data.bounceType][
